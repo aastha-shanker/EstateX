@@ -8,7 +8,8 @@ import os
 BASE_DIR = os.path.dirname(__file__)
 model_path = os.path.join(BASE_DIR, "house_price_model.pkl")
 
-model = pickle.load(open(model_path, "rb"))
+with open(model_path, "rb") as f:
+    model = pickle.load(f)
 
 st.title("🏠 EstateX")
 st.subheader("Smart House Price Prediction System") 
