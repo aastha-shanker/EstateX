@@ -2,9 +2,13 @@ import streamlit as st
 import pickle
 import pandas as pd
 import altair as alt
+import os
 
-# Load the trained model
-model = pickle.load(open("house_price_model.pkl", "rb"))
+
+BASE_DIR = os.path.dirname(__file__)
+model_path = os.path.join(BASE_DIR, "house_price_model.pkl")
+
+model = pickle.load(open(model_path, "rb"))
 
 st.title("🏠 EstateX")
 st.subheader("Smart House Price Prediction System") 
