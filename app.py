@@ -1,6 +1,8 @@
 import streamlit as st
 import pickle
 import matplotlib.pyplot as plt
+import pandas as pd
+import altair as alt
 
 # Load the trained model
 model = pickle.load(open("house_price_model.pkl", "rb"))
@@ -30,16 +32,33 @@ if st.button("Predict Price"):
         age_years
     ]]
    prediction = model.predict(sample_house)
-   plt.style.use("dark_background")
+   
    
    st.subheader(f" Estimated Price: ₹ {prediction[0]:,.2f}")
    feature_names = ["Area (sq ft)", "Bedrooms", "Bathrooms", "Floors", "Garage Spots", "Age (years)"]
-   importance = model.coef_ 
+   importance = model.coef_
 
-   plt.bar(feature_names, importance , color="#00C853")
-   plt.xlabel("Features")
-   plt.ylabel("Importance (Coefficient Value)")  
-   plt.title("Feature Importance")
+   df = pd.DataFrame({
+    "Feature": feature_names,
+    "Importance": importance
+   })
 
-   st.pyplot(plt)
-   st.write("The bar chart above shows the importance of each feature in determining the house price. Features with higher coefficients have a greater impact on the predicted price.") 
+   df = df.sort_values("Importance")
+
+   chart = alt.Chart(df).mark_bar().encode(
+    x=alt.X("Importance:Q"),
+    y=alt.Y("Feature:N", sort="-x"),
+    color=alt.condition(
+        alt.datum.Importance > 0,
+        alt.value("#00C853"),
+        alt.value("#FF5252")
+    )
+   ).properties(
+    title="Feature Importance"
+   )
+
+   st.altair_chart(chart, use_container_width=True)
+
+   st.write("The bar chart shows how each feature impacts house price prediction.")
+   st.write("Features with positive importance increase the predicted price, while those with negative importance decrease it.")
+   st.write("Thank you for using EstateX! We hope our smart house price prediction system helps you make informed real estate decisions.")
