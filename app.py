@@ -66,3 +66,4 @@ if st.button("Predict Price"):
    st.write("The bar chart shows how each feature impacts house price prediction.")
    st.write("Features with positive importance increase the predicted price, while those with negative importance decrease it.")
    st.write("Thank you for using EstateX! We hope our smart house price prediction system helps you make informed real estate decisions.")
+   
